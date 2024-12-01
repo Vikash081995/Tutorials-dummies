@@ -1,14 +1,31 @@
 import React from "react";
-import { render, screen } from "@testing-library/react";
+import { render, screen, fireEvent } from "@testing-library/react";
 import App from "./App";
 
-describe("when everything is okay", () => {
-  test("renders the app component without crashing", () => {
-    render(<App />);
-  });
-
-  test("select the children tha is passed  to the customInput component", () => {
-    render(<App />);
-    expect(screen.getByText("Search:")).toBeInTheDocument();
-  });
+test("button starts with correct label and  color", () => {
+  render(<App />);
+  const buttonElement = screen.getByRole("button", { name: /blue/i });
+  expect(buttonElement).toHaveClass("red");
 });
+
+test("button has correct label and color after click", () => {
+  render(<App />);
+  const buttonElement = screen.getByRole("button", { name: /blue/i });
+  expect(buttonElement).toHaveClass("red");
+  fireEvent.click(buttonElement);
+  //check button label
+  expect(screen.getByRole("button")).toHaveTextContent("Change to red");
+  expect(buttonElement).toHaveClass("blue");
+});
+
+test("checkbox flow", () => {
+  render(<App />);
+  const buttonElement = screen.getByRole("button", { name: /blue/i });
+  const checkBoxElement = screen.getByRole("checkbox", {
+    name: /disable button/i,
+  });
+  expect(buttonElement).toBeEnabled();
+  expect(checkBoxElement).not.toBeChecked();
+  fireEvent.click(buttonElement);
+  expect(buttonElement).toBeEnabled()
+})
